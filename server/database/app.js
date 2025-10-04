@@ -42,7 +42,7 @@ app.get('/fetchReviews', async (req, res) => {
     const documents = await Reviews.find();
     res.json(documents);
   } catch (error) {
-    res.status(500).json({ error: 'Error fetching documents' });
+    res.status(500).json({ error: 'Error fetching reviews' });
   }
 });
 
@@ -52,23 +52,44 @@ app.get('/fetchReviews/dealer/:id', async (req, res) => {
     const documents = await Reviews.find({dealership: req.params.id});
     res.json(documents);
   } catch (error) {
-    res.status(500).json({ error: 'Error fetching documents' });
+    res.status(500).json({ error: 'Error fetching dealer reviews' });
   }
 });
 
 // Express route to fetch all dealerships
 app.get('/fetchDealers', async (req, res) => {
-//Write your code here
+    try {
+        const documents = await Dealerships.find();
+        res.json(documents);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching dealers' });
+    }
 });
 
 // Express route to fetch Dealers by a particular state
 app.get('/fetchDealers/:state', async (req, res) => {
-//Write your code here
+    const state = req.params.state;
+    try {
+      const dealers = await Dealerships.find({ state: state });
+      res.json(dealers);
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching dealerships by state' });
+    }
 });
 
 // Express route to fetch dealer by a particular id
 app.get('/fetchDealer/:id', async (req, res) => {
-//Write your code here
+    const id = req.params.id;
+    try {
+      const dealer = await Dealerships.findOne({ id: parseInt(id) });
+      if (dealer) {
+        res.json(dealer);
+      } else {
+        res.status(404).json({ error: 'Dealer not found' });
+      }
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching dealer' });
+    }
 });
 
 //Express route to insert review
